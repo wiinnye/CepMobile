@@ -1,6 +1,5 @@
 import * as Clipboard from "expo-clipboard";
 import { Alert, Button, Image, Text, View } from "react-native";
-import jiji from "../assets/images/jiji.png";
 
 export default function CepResult({
   cepInfo,
@@ -138,14 +137,14 @@ export default function CepResult({
                 borderBottomColor: "#eee",
               }}
             >
-              <div 
+              <View 
               style={{ width:"100%",display: "flex", borderWidth:"1px", borderColo:"#fff" }}>
                 <Image
-                  source={jiji}
+                 source={{ uri: '/jiji.png' }}
                   style={{ width: "100px", height: "100px", marginTop:"1rem" }}
                   resizeMode="contain"
                 />
-                <div style={{ width:"100%", display: "flex", flexDirection: "column", marginRight:"3rem"}}>
+                <View style={{ width:"100%", display: "flex", flexDirection: "column", marginRight:"3rem"}}>
                   <Text style={{fontSize:"18px"}}>Nome: {item.nomeUsuario || "Não Informado"}</Text>
                   <Text style={{fontSize:"18px"}}>
                     CEP: {item.cep} - {item.localidade}
@@ -158,8 +157,8 @@ export default function CepResult({
                   <Text style={{fontSize:"18px"}}>
                     UF: {item.uf} - DDD: {item.ddd}
                   </Text>
-                </div>
-              </div>
+                </View>
+              </View>
             </View>
           ))}
         </View>

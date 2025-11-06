@@ -1,5 +1,5 @@
 import { Alert, Button, Text, TextInput, View } from "react-native";
-import { fetchCep } from "../api/CepApi";
+import { fetchCep } from "../api/CepApi.js";
 
 export default function CepForm({
   handleCepChange,
@@ -59,9 +59,10 @@ export default function CepForm({
         marginTop: "2rem",
         width: "100%",
         height: "30%",
+        marginTop:'3rem'
       }}
     >
-      <div
+      <View
         style={{
           display: "flex",
           width: "100%",
@@ -73,9 +74,9 @@ export default function CepForm({
         >
           Salve seu Endereço Favorito
         </Text>
-      </div>
+      </View>
 
-      <div
+      <View
         style={{
           display: "flex",
           flexDirection: "column",
@@ -109,9 +110,8 @@ export default function CepForm({
           value={cepValue}
           placeholder="Digite seu cep"
           keyboardType="numeric"
-          maxLength={8}
         />
-      </div>
+      </View>
       <View style={{ width: 300, marginVertical: 10 }}>
         <Button title="consultar" color="#324376" onPress={handleSubmit} />
       </View>
