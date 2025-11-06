@@ -31,12 +31,16 @@ export default function CepResult({
 
       try {
         // API do Clipboard do Expo
+        if (typeof window !== 'undefined') {
         await Clipboard.setStringAsync(cepText);
 
         Alert.alert(
           "Copiado",
           "Informações do CEP copiadas para a área de transferência!"
-        );
+        );}else{
+          console.log("Clipboard não disponível no ambiente do servidor.");
+          return;
+        }
       } catch (err) {
         console.error("Erro ao copiar para o clipboard", err);
         Alert.alert("Erro", "Não foi possível copiar as informações.");
