@@ -1,17 +1,29 @@
 import * as Clipboard from "expo-clipboard";
-import { Alert, Button, Image, Text, View } from "react-native";
+import {
+  Alert,
+  Button,
+  Image,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
 
 export default function CepResult({
   cepInfo,
   clearInput,
   nomeUsuario,
   onSave,
+  onRemove,
   savedCeps,
 }) {
-  if (!cepInfo) {
+  const isCepInfoVisible = cepInfo !== null;
+  const isSavedCepsVisible = savedCeps && savedCeps.length > 0;
+
+  if (!isCepInfoVisible && !isSavedCepsVisible) {
     return null;
   }
 
+  //logica para fazer copia e cola das informações
   const copyToClipboard = async () => {
     if (cepInfo) {
       const complementoText =
@@ -31,13 +43,14 @@ export default function CepResult({
 
       try {
         // API do Clipboard do Expo
-        if (typeof window !== 'undefined') {
-        await Clipboard.setStringAsync(cepText);
+        if (typeof window !== "undefined") {
+          await Clipboard.setStringAsync(cepText);
 
-        Alert.alert(
-          "Copiado",
-          "Informações do CEP copiadas para a área de transferência!"
-        );}else{
+          Alert.alert(
+            "Copiado",
+            "Informações do CEP copiadas para a área de transferência!"
+          );
+        } else {
           console.log("Clipboard não disponível no ambiente do servidor.");
           return;
         }
@@ -48,6 +61,7 @@ export default function CepResult({
     }
   };
 
+  //salva o cep favorito
   const saveForm = () => {
     if (!cepInfo) {
       Alert.alert("Erro", "Nenhuma informação de CEP para salvar.");
@@ -60,77 +74,92 @@ export default function CepResult({
     Alert.alert("Sucesso", "CEP salvo na lista de sessão!");
   };
 
-  return (
+  // funcao para auxiliar para renderizar cada linha no resultado do cep
+  const renderInfoRow = (category, value) => (
     <View
+      key={category}
       style={{
-        width: "100%",
-        marginTop: "4rem",
-        alignItems: "center",
+        flexDirection: "row",
+        marginBottom: 4,
+        margin: ".5rem",
+        paddingVertical: 2,
+        justifyContent: "flex-start",
       }}
     >
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          width: "80%",
-          padding: 10,
-          borderWidth: 1,
-          borderColor: "#ccc",
-          marginBottom: 20,
-        }}
-      >
-        <View style={{ flex: 1, marginRight: 10 }}>
-          <Text style={{ fontWeight: "bold" }}>Nome:</Text>
-          <Text style={{ fontWeight: "bold" }}>CEP:</Text>
-          <Text style={{ fontWeight: "bold" }}>Logradouro:</Text>
-          <Text style={{ fontWeight: "bold" }}>Complemento:</Text>
-          <Text style={{ fontWeight: "bold" }}>Bairro:</Text>
-          <Text style={{ fontWeight: "bold" }}>Localidade:</Text>
-          <Text style={{ fontWeight: "bold" }}>UF:</Text>
-          <Text style={{ fontWeight: "bold" }}>DDD:</Text>
-        </View>
-        {/* Coluna de Valores */}
-        <View style={{ flex: 2 }}>
-          <Text>{!nomeUsuario === "" ? "não encontrado" : nomeUsuario}</Text>
-          <Text>{cepInfo.cep}</Text>
-          <Text>{cepInfo.logradouro}</Text>
-          <Text>
-            {cepInfo.complemento === ""
-              ? "não encontrado"
-              : cepInfo.complemento}
-          </Text>
-          <Text>{cepInfo.bairro}</Text>
-          <Text>{cepInfo.localidade}</Text>
-          <Text>{cepInfo.uf}</Text>
-          <Text>{cepInfo.ddd}</Text>
-        </View>
-      </View>
+      <Text style={{ fontWeight: "bold", width: 120 }}>{category}:</Text>
+      <Text style={{ flex: 1 }}>{value}</Text>
+    </View>
+  );
 
-      {/* Botões */}
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-around",
-          width: "90%",
-        }}
-      >
-        <Button title="Salvar" onPress={saveForm} color="rgb(68, 167, 206)" />
-        <Button
-          title="Copiar Informações"
-          onPress={copyToClipboard}
-          color="rgb(68, 167, 206)"
-        />
-        <Button
-          title="Nova Busca"
-          onPress={clearInput}
-          color="rgb(68, 167, 206)"
-        />
-      </View>
+  return (
+    <View style={{ width: "100%", alignSelf: "center", flex: 1 }}>
+      {/* Mostrar Resultado do Cep */}
+      {isCepInfoVisible && (
+        <>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "auto",
+              alignSelf: "center",
+              padding: 10,
+              borderWidth: 1,
+              borderRadius: 5,
+              borderColor: "#ccc",
+              backgroundColor: "#fff",
+              marginBottom: 20,
+            }}
+          >
+            <View style={{ width: "100%", paddingHorizontal: 10 }}>
+              {renderInfoRow("Nome", nomeUsuario || "não informado")}
+              {renderInfoRow("CEP", cepInfo.cep)}
+              {renderInfoRow("Logradouro", cepInfo.logradouro)}
+              {renderInfoRow("Bairro", cepInfo.bairro)}
+              {renderInfoRow("Localidade", cepInfo.localidade)}
+              {renderInfoRow("UF", cepInfo.uf)}
+              {renderInfoRow("DDD", cepInfo.ddd)}
+              {renderInfoRow(
+                "Complemento",
+                cepInfo.complemento === ""
+                  ? "não encontrado"
+                  : cepInfo.complemento
+              )}
+            </View>
+          </View>
 
-      {savedCeps && (
-        <View style={{ marginTop: 20 }}>
-          <Text style={{ fontSize: 18, fontWeight: "bold", padding: "15px" }}>
-            CEPs Salvos:
+          {/* Botões */}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around",
+              width: "70%",
+              padding: "1rem",
+              alignSelf: "center",
+            }}
+          >
+            <Button title="Salvar" onPress={saveForm} color="#324376" />
+            <Button
+              title="Nova Consulta"
+              onPress={clearInput}
+              color="#324376"
+            />
+            <Button title="Copiar" onPress={copyToClipboard} color="#324376" />
+          </View>
+        </>
+      )}
+
+      {/* Salvar o cep */}
+      {isSavedCepsVisible && (
+        <View>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              padding: ".5rem",
+              marginTop: "2rem",
+            }}
+          >
+            CEP's Favoritos:
           </Text>
           {savedCeps.map((item, index) => (
             <View
@@ -141,28 +170,99 @@ export default function CepResult({
                 borderBottomColor: "#eee",
               }}
             >
-              <View 
-              style={{ width:"100%",display: "flex", borderWidth:"1px", borderColo:"#fff" }}>
-                <Image
-                 source={{ uri: '/jiji.png' }}
-                  style={{ width: "100px", height: "100px", marginTop:"1rem" }}
-                  resizeMode="contain"
-                />
-                <View style={{ width:"100%", display: "flex", flexDirection: "column", marginRight:"3rem"}}>
-                  <Text style={{fontSize:"18px"}}>Nome: {item.nomeUsuario || "Não Informado"}</Text>
-                  <Text style={{fontSize:"18px"}}>
-                    CEP: {item.cep} - {item.localidade}
-                  </Text>
-                  <Text style={{fontSize:"18px"}}>
-                    Logradouro: {item.logradouro} - Bairro: {item.bairro}
-                  </Text>
-                  <Text style={{fontSize:"18px"}}>
-                    Complemento: {item.complemento || "N/A"}</Text>
-                  <Text style={{fontSize:"18px"}}>
-                    UF: {item.uf} - DDD: {item.ddd}
-                  </Text>
-                </View>
+              <View
+                style={{
+                  width: "100%",
+                  flexDirection: "row",
+                  alignItems: "flex-start",
+                  borderWidth: 1,
+                  padding: 10,
+                  borderColor: "#81a9ff",
+                  borderRadius: 8,
+                  marginBottom: 10,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "column",
+                    marginRight: 10,
+                    alignSelf:'center',
+                  }}
+                >
+                  <Image
+                    source={{ uri: "/jiji.png" }}
+                    style={{
+                      width: 80,
+                      height: 80,
+                      marginRight: 10,
+                      marginTop: 5,
+                      alignSelf: "center",
+                    }}
+                    resizeMode="contain"
+                  />
               </View>
+                  <View
+                    style={{
+                      flex: 1, 
+                      flexDirection: "column",
+                      marginRight: 10,
+                    }}
+                  >
+                    <Text style={{ fontSize: "18px", fontWeight: "bold" }}>
+                      Nome:
+                      <Text style={{ fontSize: "16px", fontWeight: "400" }}>
+                        {" "}
+                        {item.nomeUsuario || "Não Informado"}
+                      </Text>
+                    </Text>
+                    <Text style={{ fontSize: "18px", fontWeight: "bold" }}>
+                      CEP:
+                      <Text style={{ fontSize: "16px", fontWeight: "400" }}>
+                        {" "}
+                        {item.cep} | {item.localidade} - {item.uf}
+                      </Text>
+                    </Text>
+                    <Text style={{ fontSize: "18px", fontWeight: "bold" }}>
+                      Logradouro:
+                      <Text style={{ fontSize: "16px", fontWeight: "400" }}>
+                        {" "}
+                        {item.logradouro}, {item.bairro}
+                      </Text>
+                    </Text>
+                    <Text style={{ fontSize: "18px", fontWeight: "bold" }}>
+                      Complemento:
+                      <Text style={{ fontSize: "16px", fontWeight: "400" }}>
+                        {" "}
+                        {item.complemento || "N/A"}
+                      </Text>
+                    </Text>
+                    <Text style={{ fontSize: "18px", fontWeight: "bold" }}>
+                      DDD:
+                      <Text style={{ fontSize: "16px", fontWeight: "400" }}>
+                        {" "}
+                        {item.ddd}
+                      </Text>
+                    </Text>
+                  </View>
+                <View
+        style={{
+          alignSelf: "flex-start", 
+          marginTop: 5, 
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => onRemove(item.id)}
+          style={{
+            backgroundColor: "#BB0A21",
+            padding: 6,
+            borderRadius: 5,
+          }}
+        >
+          <Text style={{ color: "#fff", fontSize: 14 }}>Excluir</Text>
+        </TouchableOpacity>
+      </View>
+                </View>
+              
             </View>
           ))}
         </View>

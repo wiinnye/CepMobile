@@ -8,14 +8,15 @@ export default function CepForm({
   nomeUsuario,
   setNomeUsuario,
 }) {
+  // pegar o valor do Cep digitado 
   const handleChangeCep = (text) => {
     setCepValue(text);
   };
-
+  // pegar o valor do Nome digitado 
   const handleChangeNome = (nome) => {
     setNomeUsuario(nome);
   };
-
+  // PARA ENCONTRAR O CEP DIGITADO
   const handleSubmit = async () => {
     if (cepValue.length !== 8 || !/^\d+$/.test(cepValue)) {
       Alert.alert(
@@ -51,17 +52,9 @@ export default function CepForm({
   };
 
   return (
-    <View
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: "2rem",
-        width: "100%",
-        height: "30%",
-        marginTop:'3rem'
-      }}
-    >
+    <View style={{ alignSelf: "center", marginBottom:"2rem"}}>
+
+      {/* Titulo  */}
       <View
         style={{
           display: "flex",
@@ -70,12 +63,18 @@ export default function CepForm({
         }}
       >
         <Text
-          style={{ fontSize: "20px", fontWeight: "bold", marginTop: "2rem" }}
+          style={{
+            fontSize: "22px",
+            fontWeight: "bold",
+            marginTop: "2rem",
+            color:"#0675B0",
+          }}
         >
           Salve seu Endereço Favorito
         </Text>
       </View>
 
+      {/* Inputs */}
       <View
         style={{
           display: "flex",
@@ -87,10 +86,12 @@ export default function CepForm({
       >
         <TextInput
           style={{
-            width: "300px",
+            width: "310px",
             padding: "1rem",
+            color:"#fff",
+            backgroundColor:"#0675B0",
             borderColor: "#324376",
-            borderRadius: "2rem",
+            borderRadius: "1rem",
             borderWidth: 1,
             marginBottom: "1rem",
           }}
@@ -100,10 +101,13 @@ export default function CepForm({
         />
         <TextInput
           style={{
-            width: "300px",
+            width: "310px",
             padding: "1rem",
+            color:"#fff",
+            backgroundColor:"#0675B0",
             borderColor: "#324376",
-            borderRadius: "2rem",
+            borderColor: "#324376",
+            borderRadius: "1rem",
             borderWidth: 1,
           }}
           onChangeText={handleChangeCep}
@@ -112,7 +116,9 @@ export default function CepForm({
           keyboardType="numeric"
         />
       </View>
-      <View style={{ width: 300, marginVertical: 10 }}>
+
+      {/* Botão */}
+      <View style={{ width: 200, marginVertical: 10, alignSelf: "center" }}>
         <Button title="consultar" color="#324376" onPress={handleSubmit} />
       </View>
     </View>

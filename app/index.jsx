@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { Alert, Image, ScrollView, Text, View } from "react-native";
 import CepForm from "./cepForm";
 import CepResult from "./cepResult";
 
@@ -9,11 +9,12 @@ export default function Index() {
   const [savedCeps, setSavedCeps] = useState([]);
   const [nomeUsuario, setNomeUsuario] = useState("");
 
-  
+  // seta as informações do cep informado 
   const handleCepChange = async (info) => {
     setCepInfo(info);
   };
 
+  // Limpa os inputs
   const clearInput = () => {
     setCepValue("");
     setCepInfo(null);
@@ -30,6 +31,14 @@ export default function Index() {
     setSavedCeps(prevCeps => [newEntry, ...prevCeps]); 
   }
   
+  
+    //Funcao para excluir um item da lista
+  const removeCepFromList = (idToRemove) => {
+    setSavedCeps(prevCeps => 
+      prevCeps.filter(cep => cep.id !== idToRemove)
+    );
+    Alert.alert("Removido", "CEP excluído com sucesso!"); 
+  };
   return (
     <ScrollView >
     <View style={{width:"100%", alignSelf:"center", flex: 1}} >
@@ -38,23 +47,23 @@ export default function Index() {
         display:"flex",
         alignItems:"center",
         width:"100%",
-        // height:"14%", 
+        marginBottom:"1rem" ,
         backgroundColor:"#BB0A21"}}>
         <Image 
         source={{ uri: '/kiki.png' }}
-        style={{width:"200px", height:"100px"}} 
+        style={{width:"300px", height:"150px"}} 
         resizeMode="contain" />
         <Text 
         style={{
-          padding:".4rem",
-          fontSize:"25px",
+          padding:".2rem",
+          fontSize:"22px",
           borderRadius:"5px",
           fontWeight:'bold',
           color:"#fff"
         }}>Serviços de CEP da
         <Text style={{
           color: "#fff",
-          fontSize:"40px",
+          fontSize:"42px",
           fontWeight:'bold',
           marginLeft:".5rem",
         }}>Kiki</Text>
@@ -70,16 +79,15 @@ export default function Index() {
           setNomeUsuario={setNomeUsuario}
         />
 
-        {/* Mostrar as informações e Salvos */}
-        {cepInfo && (
+        {/* Mostrar as informações e Cep Salvos */}
           <CepResult
             cepInfo={cepInfo}
             clearInput={clearInput}
             onSave={addCepToList}
+            onRemove={removeCepFromList}
             savedCeps={savedCeps}
             nomeUsuario={nomeUsuario}
           />
-          )}
     </View>
     </ScrollView>
   );
