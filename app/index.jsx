@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, Image, ScrollView, Text, View } from "react-native";
+import { Alert, Image, ScrollView, View } from "react-native";
 import CepForm from "./cepForm";
 import CepResult from "./cepResult";
 
@@ -47,27 +47,11 @@ export default function Index() {
         display:"flex",
         alignItems:"center",
         width:"100%",
-        marginBottom:"1rem" ,
-        backgroundColor:"#BB0A21"}}>
+        marginBottom:"1rem"}}>
         <Image 
-        source={{ uri: '/kiki.png' }}
-        style={{width:"300px", height:"150px"}} 
+        source={{ uri: '/kiki.jpg' }}
+        style={{width:"500px", height:"300px"}} 
         resizeMode="contain" />
-        <Text 
-        style={{
-          padding:".2rem",
-          fontSize:"22px",
-          borderRadius:"5px",
-          fontWeight:'bold',
-          color:"#fff"
-        }}>Serviços de CEP da
-        <Text style={{
-          color: "#fff",
-          fontSize:"42px",
-          fontWeight:'bold',
-          marginLeft:".5rem",
-        }}>Kiki</Text>
-        </Text>
       </View>
 
       {/* Formulario */}

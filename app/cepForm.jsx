@@ -58,8 +58,7 @@ export default function CepForm({
       <View
         style={{
           display: "flex",
-          width: "100%",
-          paddingLeft: "2rem",
+          width: "100%"
         }}
       >
         <Text
@@ -86,12 +85,12 @@ export default function CepForm({
       >
         <TextInput
           style={{
-            width: "310px",
+            width: "210px",
             padding: "1rem",
-            color:"#fff",
-            backgroundColor:"#0675B0",
+            color:"#000",
+            backgroundColor:"#b9d3d8",
             borderColor: "#324376",
-            borderRadius: "1rem",
+            borderRadius: ".5rem",
             borderWidth: 1,
             marginBottom: "1rem",
           }}
@@ -101,18 +100,18 @@ export default function CepForm({
         />
         <TextInput
           style={{
-            width: "310px",
+            width: "210px",
             padding: "1rem",
-            color:"#fff",
-            backgroundColor:"#0675B0",
+            color:"#000",
+            backgroundColor:"#b9d3d8",
             borderColor: "#324376",
             borderColor: "#324376",
-            borderRadius: "1rem",
+            borderRadius: ".5rem",
             borderWidth: 1,
           }}
           onChangeText={handleChangeCep}
           value={cepValue}
-          placeholder="Digite seu cep"
+          placeholder="Digite o CEP"
           keyboardType="numeric"
         />
       </View>

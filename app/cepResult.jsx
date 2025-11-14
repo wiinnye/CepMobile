@@ -74,7 +74,7 @@ export default function CepResult({
     Alert.alert("Sucesso", "CEP salvo na lista de sessão!");
   };
 
-  // funcao para auxiliar para renderizar cada linha no resultado do cep
+  // funcao para auxiliar para renderizar cada linha no resultado do cep - lista
   const renderInfoRow = (category, value) => (
     <View
       key={category}
@@ -157,6 +157,7 @@ export default function CepResult({
               fontWeight: "bold",
               padding: ".5rem",
               marginTop: "2rem",
+              color:"#0675B0",
             }}
           >
             CEP's Favoritos:
